@@ -68,6 +68,10 @@ CKEDITOR.plugins.add("wordcount", {
             maxWordCount: -1,
             maxCharCount: -1,
 
+            //MINLENGTH properties
+            minWordCount: -1,
+            minCharCount: -1,
+
             // Filter
             filter: null,
 
@@ -107,6 +111,10 @@ CKEDITOR.plugins.add("wordcount", {
             if (config.maxWordCount > -1) {
                 defaultFormat += "/" + config.maxWordCount;
             }
+
+            if (config.minWordCount > -1) {
+                defaultFormat += " - " + editor.lang.wordcount.MinWordCount + config.minWordCount;
+            }
         }
 
         if (config.showCharCount && config.showWordCount) {
@@ -120,13 +128,17 @@ CKEDITOR.plugins.add("wordcount", {
             if (config.maxCharCount > -1) {
                 defaultFormat += "/" + config.maxCharCount;
             }
+
+            if (config.minCharCount > -1) {
+                defaultFormat += " - " + editor.lang.wordcount.MinCharCount + config.minCharCount;
+            }
         }
 
         var format = defaultFormat;
 
         bbcodePluginLoaded = typeof editor.plugins.bbcode != 'undefined';
 
-       function counterId(editorInstance) {
+        function counterId(editorInstance) {
             return "cke_wordcount_" + editorInstance.name;
         }
 
@@ -216,9 +228,9 @@ CKEDITOR.plugins.add("wordcount", {
 
         function countWords(text) {
             var normalizedText = text.
-                replace(/(\r\n|\n|\r)/gm, " ").
-                replace(/^\s+|\s+$/g, "").
-                replace("&nbsp;", " ");
+            replace(/(\r\n|\n|\r)/gm, " ").
+            replace(/^\s+|\s+$/g, "").
+            replace("&nbsp;", " ");
 
             normalizedText = strip(normalizedText);
 
@@ -313,11 +325,16 @@ CKEDITOR.plugins.add("wordcount", {
 
             // Check for word limit and/or char limit
             if ((config.maxWordCount > -1 && wordCount > config.maxWordCount && deltaWord > 0) ||
-                (config.maxCharCount > -1 && charCount > config.maxCharCount && deltaChar > 0)) {
+                (config.maxCharCount > -1 && charCount > config.maxCharCount && deltaChar > 0) ||
+                (config.minWordCount > -1 && wordCount < config.minWordCount) ||
+                (config.minCharCount > -1 && charCount < config.minCharCount)) {
 
                 limitReached(editorInstance, limitReachedNotified);
-            } else if ((config.maxWordCount == -1 || wordCount <= config.maxWordCount) &&
-            (config.maxCharCount == -1 || charCount <= config.maxCharCount)) {
+            } else if (
+                (config.maxWordCount == -1 || wordCount <= config.maxWordCount) &&
+                (config.maxCharCount == -1 || charCount <= config.maxCharCount) &&
+                (config.minWordCount == -1 || wordCount >= config.minWordCount) &&
+                (config.minCharCount == -1 || charCount >= config.minCharCount)) {
 
                 limitRestored(editorInstance);
             } else {
