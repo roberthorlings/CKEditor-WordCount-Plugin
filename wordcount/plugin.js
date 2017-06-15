@@ -109,7 +109,7 @@ CKEDITOR.plugins.add("wordcount", {
         if (config.showWordCount) {
             defaultFormat += editor.lang.wordcount.WordCount + " %wordCount%";
             if (config.maxWordCount > -1) {
-                defaultFormat += "/" + config.maxWordCount;
+                defaultFormat += " / " + config.maxWordCount;
             }
 
             if (config.minWordCount > -1) {

@@ -4,7 +4,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 CKEDITOR.plugins.setLang('wordcount', 'en', {
     MinWordCount: 'Minimum words:',
-    WordCount: 'Words:',
+    WordCount: 'Words used:',
     MinCharCount: 'Minimum characters:',
     CharCount: 'Characters:',
     CharCountWithHTML: 'Characters (with HTML):',
